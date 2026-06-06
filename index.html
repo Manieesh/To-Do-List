@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A modern, accessible task manager that saves tasks in your browser.">
+  <title>Taskflow | To-Do List</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="#" aria-label="Taskflow home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" role="img">
+            <path d="m6.5 12.5 3.2 3.2 7.8-8.1"></path>
+          </svg>
+        </span>
+        <span>Taskflow</span>
+      </a>
+      <p class="today-label" id="today-label"></p>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="page-title">
+        <p class="eyebrow">Plan with purpose</p>
+        <h1 id="page-title">Make space for<br><em>what matters.</em></h1>
+        <p class="hero-copy">A quiet place to collect your thoughts, organize your day, and keep moving forward.</p>
+      </section>
+
+      <section class="task-card" aria-labelledby="task-section-title">
+        <div class="task-card-header">
+          <div>
+            <p class="section-kicker">Your list</p>
+            <h2 id="task-section-title">Today’s tasks</h2>
+          </div>
+          <div class="summary" aria-label="Task summary">
+            <span><strong id="active-count">0</strong> active</span>
+            <span class="summary-divider" aria-hidden="true"></span>
+            <span><strong id="completed-count">0</strong> done</span>
+          </div>
+        </div>
+
+        <form class="task-form" id="task-form" novalidate>
+          <div class="input-group">
+            <label class="sr-only" for="task-input">Add a new task</label>
+            <span class="input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>
+            </span>
+            <input
+              id="task-input"
+              name="task"
+              type="text"
+              maxlength="160"
+              autocomplete="off"
+              placeholder="What needs to be done?"
+              aria-describedby="validation-message"
+            >
+            <button class="add-button" type="submit">Add task</button>
+          </div>
+          <p class="validation-message" id="validation-message" role="alert"></p>
+        </form>
+
+        <div class="task-toolbar">
+          <nav class="filters" aria-label="Filter tasks">
+            <button class="filter-button is-active" type="button" data-filter="all" aria-pressed="true">All</button>
+            <button class="filter-button" type="button" data-filter="active" aria-pressed="false">Active</button>
+            <button class="filter-button" type="button" data-filter="completed" aria-pressed="false">Completed</button>
+          </nav>
+          <button class="clear-button" id="clear-completed" type="button" disabled>
+            Clear completed
+          </button>
+        </div>
+
+        <ul class="task-list" id="task-list" aria-label="Tasks"></ul>
+
+        <div class="empty-state" id="empty-state" hidden>
+          <div class="empty-illustration" aria-hidden="true">
+            <svg viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="46"></circle>
+              <path d="M40 61.5 53.5 75 82 44"></path>
+              <path class="spark spark-one" d="M26 30v-8M22 26h8"></path>
+              <path class="spark spark-two" d="M96 86v-8M92 82h8"></path>
+            </svg>
+          </div>
+          <h3 id="empty-title">Your day is wide open</h3>
+          <p id="empty-copy">Add a task above and take the first step.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Small steps, meaningful progress.</p>
+    </footer>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>
