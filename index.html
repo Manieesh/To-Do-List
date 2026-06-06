@@ -60,6 +60,24 @@
               placeholder="What needs to be done?"
               aria-describedby="validation-message"
             >
+            <label class="sr-only" for="task-time">Select a time</label>
+            <input
+              id="task-time"
+              name="taskTime"
+              type="time"
+              class="time-input"
+              aria-describedby="validation-message"
+            >
+            <label class="sr-only" for="task-duration">Duration (mins)</label>
+            <input
+              id="task-duration"
+              name="taskDuration"
+              type="number"
+              min="1"
+              placeholder="Mins"
+              class="duration-input"
+              aria-describedby="validation-message"
+            >
             <button class="add-button" type="submit">Add task</button>
           </div>
           <p class="validation-message" id="validation-message" role="alert"></p>
@@ -93,10 +111,71 @@
       </section>
     </main>
 
-    <footer>
-      <p>Small steps, meaningful progress.</p>
+    <footer class="site-footer">
+      <div class="footer-grid">
+        <div class="footer-col branding">
+          <h3>ToDo Master</h3>
+          <p class="tagline">Stay Organized • Stay Focused • Stay Productive</p>
+          <p class="desc">A quiet place to collect your thoughts, organize your day, and keep moving forward.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Quick Navigation</h4>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#task-section-title">Tasks</a></li>
+            <li><a href="#">Features</a></li>
+            <li><a href="#">About</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Core Features</h4>
+          <ul>
+            <li>Create Tasks</li>
+            <li>Edit Tasks</li>
+            <li>Delete Tasks</li>
+            <li>Task Filtering</li>
+            <li>Local Storage Support</li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Technologies Used</h4>
+          <ul>
+            <li>HTML5</li>
+            <li>CSS3</li>
+            <li>JavaScript ES6+</li>
+            <li>Local Storage API</li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Developer</h4>
+          <ul>
+            <li>Manieesh Kumar</li>
+            <li><a href="https://github.com/Manieesh" target="_blank" rel="noopener noreferrer">GitHub Profile</a></li>
+            <li><a href="https://www.linkedin.com/in/manieesh-kumar-r" target="_blank" rel="noopener noreferrer">LinkedIn Profile</a></li>
+            <li><a href="#">Portfolio Website</a></li>
+            <li><a href="mailto:manieeshkumar@karunya.edu.in">Contact Email</a></li>
+            <li><a href="tel:+916380428254">+91 6380428254</a></li>
+          </ul>
+        </div>
+        <div class="footer-col stats-col">
+          <h4>App Statistics</h4>
+          <div class="stat-item"><span>Total Tasks:</span> <strong id="stat-total">0</strong></div>
+          <div class="stat-item"><span>Active:</span> <strong id="stat-active">0</strong></div>
+          <div class="stat-item"><span>Completed:</span> <strong id="stat-completed">0</strong></div>
+          <div class="stat-item"><span>Completion:</span> <strong id="stat-percent">0%</strong></div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="current-year"></span> ToDo Master. All Rights Reserved.</p>
+        <p>Designed & Developed by Manieesh Kumar.</p>
+        <p>Version 1.0.0</p>
+      </div>
     </footer>
   </div>
+
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+  </button>
 
   <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 </body>

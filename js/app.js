@@ -10,6 +10,8 @@ const VALID_FILTERS = new Set(["all", "active", "completed"]);
 const elements = {
   form: document.querySelector("#task-form"),
   input: document.querySelector("#task-input"),
+  timeInput: document.querySelector("#task-time"),
+  durationInput: document.querySelector("#task-duration"),
   validation: document.querySelector("#validation-message"),
   list: document.querySelector("#task-list"),
   filters: document.querySelector(".filters"),
@@ -21,7 +23,13 @@ const elements = {
   emptyTitle: document.querySelector("#empty-title"),
   emptyCopy: document.querySelector("#empty-copy"),
   todayLabel: document.querySelector("#today-label"),
-  toast: document.querySelector("#toast")
+  toast: document.querySelector("#toast"),
+  statTotal: document.querySelector("#stat-total"),
+  statActive: document.querySelector("#stat-active"),
+  statCompleted: document.querySelector("#stat-completed"),
+  statPercent: document.querySelector("#stat-percent"),
+  currentYear: document.querySelector("#current-year"),
+  backToTop: document.querySelector("#back-to-top")
 };
 
 // The state object is the single source of truth for tasks and the current view.
@@ -47,7 +55,9 @@ function loadTasks() {
       typeof task.id === "string" &&
       typeof task.text === "string" &&
       typeof task.completed === "boolean" &&
-      typeof task.createdAt === "number"
+      typeof task.createdAt === "number" &&
+      (task.dueTime === undefined || typeof task.dueTime === "string") &&
+      (task.duration === undefined || typeof task.duration === "string")
     );
   } catch {
     return [];
@@ -72,12 +82,14 @@ function createId() {
     `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
-function addTask(text) {
+function addTask(text, dueTime, duration) {
   state.tasks.unshift({
     id: createId(),
     text,
     completed: false,
-    createdAt: Date.now()
+    createdAt: Date.now(),
+    dueTime: dueTime || "",
+    duration: duration || ""
   });
 
   commitTasks();
@@ -163,6 +175,19 @@ function render() {
   renderCounters();
   renderFilters();
   renderEmptyState(visibleTasks.length);
+  renderFooterStats();
+}
+
+function renderFooterStats() {
+  const total = state.tasks.length;
+  const completed = state.tasks.filter((task) => task.completed).length;
+  const active = total - completed;
+  const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
+
+  if (elements.statTotal) elements.statTotal.textContent = String(total);
+  if (elements.statActive) elements.statActive.textContent = String(active);
+  if (elements.statCompleted) elements.statCompleted.textContent = String(completed);
+  if (elements.statPercent) elements.statPercent.textContent = `${percent}%`;
 }
 
 // Task elements are created from state. Action handling stays on the parent list.
@@ -203,6 +228,20 @@ function createTaskElement(task) {
     date.textContent = formatCreatedAt(task.createdAt);
 
     content.append(text, date);
+
+    if (task.dueTime) {
+      const dueTime = document.createElement("span");
+      dueTime.className = "task-time";
+      dueTime.textContent = `Due ${formatDueTime(task.dueTime)}`;
+      content.append(dueTime);
+    }
+
+    if (task.duration) {
+      const duration = document.createElement("span");
+      duration.className = "task-duration";
+      duration.textContent = task.dueTime ? ` • ${task.duration} mins` : `${task.duration} mins`;
+      content.append(duration);
+    }
   }
 
   const actions = document.createElement("div");
@@ -281,6 +320,18 @@ function formatCreatedAt(timestamp) {
     : new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric", year: "numeric" }).format(createdDate);
 }
 
+function formatDueTime(timeString) {
+  if (!timeString) {
+    return "";
+  }
+
+  const [hours, minutes] = timeString.split(":").map(Number);
+  const dueDate = new Date();
+  dueDate.setHours(hours, minutes, 0, 0);
+
+  return new Intl.DateTimeFormat(undefined, { hour: "numeric", minute: "2-digit" }).format(dueDate);
+}
+
 function showValidation(message) {
   elements.validation.textContent = message;
   elements.input.setAttribute("aria-invalid", String(Boolean(message)));
@@ -306,6 +357,8 @@ function submitEdit(input) {
 elements.form.addEventListener("submit", (event) => {
   event.preventDefault();
   const text = elements.input.value.trim();
+  const dueTime = elements.timeInput.value;
+  const duration = elements.durationInput.value;
 
   if (!text) {
     showValidation("Enter a task before adding it.");
@@ -314,7 +367,7 @@ elements.form.addEventListener("submit", (event) => {
   }
 
   showValidation("");
-  addTask(text);
+  addTask(text, dueTime, duration);
   elements.form.reset();
   elements.input.focus();
 });
